@@ -1,11 +1,9 @@
-from matplotlib import pyplot as plt
 import numpy as np
 from skimage.transform import rescale, resize, downscale_local_mean
 from sklearn import datasets, svm, metrics
 from sklearn.preprocessing import StandardScaler, scale
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
-import scipy.stats as st
 import pickle
 import sys, os
 
@@ -52,15 +50,6 @@ def create_classifier(use_old, n=60_000):
     return clf, nrows, ncols
 
 
-def gkern(n, std=5):
-    """Returns a 2D Gaussian kernel of size nxn"""
-
-    x = np.linspace(-std, std, n + 1)
-    kern1d = np.diff(st.norm.cdf(x))
-    kern2d = np.outer(kern1d, kern1d)
-    return kern2d / kern2d.sum()
-
-
 def parse(d, clf, nrows, ncols):
     # print(d)
     width, height = d["width"], d["height"]
@@ -83,21 +72,14 @@ def parse(d, clf, nrows, ncols):
             r = y + brushsize // 2 - rightout
             t = x - brushsize // 2 + topout
             b = x + brushsize // 2 - bottonout
-            # print(f"x {x} y {y} br {brushsize}")
-            # print(f"l {l} r {r} t {t} b {b}")
-            # print(leftout, brushsize - rightout, topout, brushsize - bottonout)
+
             cropped_kernel = kernel[
                 leftout : brushsize - rightout, topout : brushsize - bottonout
             ]
             M[l:r, t:b] = cropped_kernel
     
     flat = resize(M, (nrows, ncols)).reshape((1, -1)) * 255
-    # mean of 0 and std of 1. same as dataset
-    # scaled = (flat[0]).reshape((1, -1))
-    # print(scaled)
-    # plt.imshow((flat.reshape((nrows, ncols))))
-    # plt.colorbar()
-    # plt.show()
+
     prediction, *_ = clf.predict(flat)
 
     return prediction
