@@ -92,7 +92,7 @@ class Canvas extends React.Component {
             color: "#663399",
             width: 400,
             height: 400,
-            brushRadius: 15,
+            brushRadius: 20,
             lazyRadius: 12,
             guess: -1
         };

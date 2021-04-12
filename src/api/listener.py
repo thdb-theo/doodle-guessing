@@ -1,13 +1,17 @@
 import http.server
 import socketserver
 import json
+import os, sys
 
-from parser import parse
+from parser import parse, create_classifier
 
 PORT = 8081
 
 
-class Handler(http.server.SimpleHTTPRequestHandler):
+class Handler(http.server.BaseHTTPRequestHandler):
+    use_old = os.path.exists("clf.pickle") and (len(sys.argv) == 1 or sys.argv[1] != "-t")
+    clf, nrows, ncols = create_classifier(use_old)
+
     def add_headers(self):
         self.send_header("Content-type", "text/json")
         self.send_header("Access-Control-Allow-Origin", "http://localhost:8000")
@@ -34,7 +38,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return
         print("Received POST request")
         print(self.headers)
-        digit = parse(post_body)
+        digit = parse(post_body, self.clf, self.nrows, self.nrows)
         body = bytes(json.dumps({"item": str(digit)}), encoding="utf-8")
 
         print("Returning")
