@@ -3,7 +3,7 @@ import React from "react"
 import CanvasDraw from "react-canvas-draw";
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 
 const canvasStyles = {
@@ -153,11 +153,16 @@ class Canvas extends React.Component {
                     lazyRadius={this.state.lazyRadius}
                     style={canvasStyles}
                     onChange={this.canvasChange}
+                    canvasWidth={this.state.width}
+                    canvasHeight={this.state.height}
                 />
                 <div style={underStyles}>
                     <div className={sliderStyles}>
                         <Typography id="discrete-slider" gutterBottom>
-                            Brush Size 🖌️
+                            Brush Size&nbsp;
+                            <span role="img" aria-label="Brush emojis">
+                            🖌️
+                            </span>
                         </Typography>
 
                         <BrushSlider
