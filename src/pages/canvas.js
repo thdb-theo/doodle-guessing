@@ -121,7 +121,9 @@ class Canvas extends React.Component {
         }).then(async data => {
             const response = await data.json();
             this.setState({ "guess": response.item })
-        })
+        }).catch(err => {
+            alert("Unfortunatly, the server is currently down 😤\r\nPlease try again later")
+        });
     }
 
     clear = () => {
@@ -155,7 +157,7 @@ class Canvas extends React.Component {
                 <div style={underStyles}>
                     <div className={sliderStyles}>
                         <Typography id="discrete-slider" gutterBottom>
-                            Brush Size
+                            Brush Size 🖌️
                         </Typography>
 
                         <BrushSlider

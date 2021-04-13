@@ -3,4 +3,5 @@ module.exports = {
     title: "Online Seam Carving",
   },
   plugins: ["gatsby-plugin-sass", "gatsby-plugin-gatsby-cloud"],
+  pathPrefix: "/doodle-guessing",
 };

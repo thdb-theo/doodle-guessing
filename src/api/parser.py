@@ -1,15 +1,9 @@
 import numpy as np
-from skimage.transform import rescale, resize, downscale_local_mean
-from sklearn import datasets, svm, metrics
-from sklearn.preprocessing import StandardScaler, scale
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import train_test_split
+from skimage.transform import resize
 import os
-
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
-from tensorflow import keras
-import pickle
-import sys, os
+import keras
+import sys
 
 
 def create_classifier():
