@@ -9,8 +9,7 @@ PORT = 8081
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    use_old = os.path.exists("clf.pickle") and (len(sys.argv) == 1 or sys.argv[1] != "-t")
-    clf, nrows, ncols = create_classifier(use_old)
+    clf, nrows, ncols = create_classifier()
 
     def add_headers(self):
         self.send_header("Content-type", "text/json")

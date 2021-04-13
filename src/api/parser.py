@@ -1,64 +1,21 @@
-from matplotlib import pyplot as plt
 import numpy as np
 from skimage.transform import rescale, resize, downscale_local_mean
 from sklearn import datasets, svm, metrics
 from sklearn.preprocessing import StandardScaler, scale
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
-import scipy.stats as st
+import os
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+from tensorflow import keras
 import pickle
 import sys, os
 
-import struct
 
-# load dataset
-
-def create_classifier(use_old, n=60_000):
+def create_classifier():
     # use old classifier
-
-    with open("train-labels.idx1-ubyte", "rb") as f:
-        magic, size = struct.unpack(">II", f.read(8))
-        labels = np.fromfile(f, dtype=np.dtype(np.uint8).newbyteorder(">"))
-
-    with open("train-images.idx3-ubyte", "rb") as f:
-        magic, size = struct.unpack(">II", f.read(8))
-        nrows, ncols = struct.unpack(">II", f.read(8))
-        data = np.fromfile(f, dtype=np.dtype(np.uint8).newbyteorder(">"))
-        data = data.reshape((size, nrows, ncols))
-
-    if use_old:
-        with open("clf.pickle", "rb") as f:
-            clf = pickle.load(f)
-            return clf, nrows, ncols
-
-    # digits = datasets.load_digits()
-    n_samples = len(data)
-    # flatten
-    data = data.reshape((n_samples, -1))
-    # plt.imshow(scale(data[2]).reshape((28, 28)))
-    # plt.colorbar()
-    # plt.show()
-
-
-    # create classifier
-    clf = make_pipeline(StandardScaler(), svm.SVC())
-    # train
-    print(f"Started training with {n} images")
-    clf.fit(data[:n], labels[:n])
-    with open("clf.pickle", "wb") as f:
-        pickle.dump(clf, f)
-
-    print(f"Finished training")
-    return clf, nrows, ncols
-
-
-def gkern(n, std=5):
-    """Returns a 2D Gaussian kernel of size nxn"""
-
-    x = np.linspace(-std, std, n + 1)
-    kern1d = np.diff(st.norm.cdf(x))
-    kern2d = np.outer(kern1d, kern1d)
-    return kern2d / kern2d.sum()
+    model = keras.models.load_model("mnist_model.keras")
+    return model, 28, 28
 
 
 def parse(d, clf, nrows, ncols):
@@ -83,22 +40,19 @@ def parse(d, clf, nrows, ncols):
             r = y + brushsize // 2 - rightout
             t = x - brushsize // 2 + topout
             b = x + brushsize // 2 - bottonout
-            # print(f"x {x} y {y} br {brushsize}")
-            # print(f"l {l} r {r} t {t} b {b}")
-            # print(leftout, brushsize - rightout, topout, brushsize - bottonout)
+
             cropped_kernel = kernel[
                 leftout : brushsize - rightout, topout : brushsize - bottonout
             ]
             M[l:r, t:b] = cropped_kernel
-    
-    flat = resize(M, (nrows, ncols)).reshape((1, -1)) * 255
-    # mean of 0 and std of 1. same as dataset
-    # scaled = (flat[0]).reshape((1, -1))
-    # print(scaled)
+
+    flat = resize(M, (nrows, ncols)).reshape((1, nrows, ncols, 1)) * 255
+
     # plt.imshow((flat.reshape((nrows, ncols))))
     # plt.colorbar()
     # plt.show()
-    prediction, *_ = clf.predict(flat)
+    onehot, *_ = clf.predict(flat)
+    prediction = np.argmax(onehot, axis=0)
 
     return prediction
 
@@ -212,7 +166,7 @@ if __name__ == "__main__":
         "width": 400,
         "height": 400,
     }
-    use_old = os.path.exists("clf.pickle") and (len(sys.argv) == 1 or sys.argv[1] != "-t")
-    clf, nrows, ncols = create_classifier(use_old)
+
+    clf, nrows, ncols = create_classifier()
     p = parse(ex, clf, nrows, ncols)
     print(p)
