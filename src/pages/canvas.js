@@ -106,7 +106,7 @@ class Canvas extends React.Component {
     }
 
     canvasChange = async () => {
-        await fetch("http://localhost:8081", {
+        await fetch("https://129.242.219.114:8081", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
