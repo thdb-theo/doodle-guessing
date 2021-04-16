@@ -17,6 +17,7 @@ from keras.optimizers import SGD
 def load_dataset():
     # load dataset
     (trainX, trainY), (testX, testY) = mnist.load_data()
+    print(trainX[0], trainY[0])
     # reshape dataset to have a single channel
     trainX = trainX.reshape((trainX.shape[0], 28, 28, 1))
     testX = testX.reshape((testX.shape[0], 28, 28, 1))

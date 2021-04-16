@@ -1,4 +1,3 @@
-# from matplotlib import pyplot as plt
 import numpy as np
 from skimage.transform import resize
 from skimage.util import pad
@@ -27,13 +26,15 @@ def parse(d, clf, nrows, ncols):
         kernel = np.ones((brushsize, brushsize))
         for point in line["points"]:
             x, y = int(point["x"]), int(point["y"])
+            # clamp x and y inside canvas
+            x = max(min(x, width), 0)
+            y = max(min(y, height), 0)
 
             # how much the kernel goes outside the canvas on each side
             topout = max(brushsize // 2 - y, 0)
             bottonout = max(brushsize // 2 + y - height, 0)
             leftout = max(brushsize // 2 - x, 0)
             rightout = max(brushsize // 2 + x - width, 0)
-
 
             # corners of the window
             t = y - brushsize // 2 + topout
@@ -52,10 +53,12 @@ def parse(d, clf, nrows, ncols):
     # same dimentions and intensity scale as training image
     scaled = smaller.reshape((1, nrows, ncols, 1)) * 255
 
-    # fig, (ax1, ax2) = plt.subplots(1, 2)
-    # ax1.imshow((scaled.reshape((nrows, ncols))))
-    # ax2.imshow(M)
-    # plt.show()
+    if __name__ == "__main__":
+        from matplotlib import pyplot as plt
+        fig, (ax1, ax2) = plt.subplots(1, 2)
+        ax1.imshow((scaled.reshape((nrows, ncols))))
+        ax2.imshow(M)
+        plt.show()
 
     # predict digit. returns onehot signal
     onehot, *_ = clf.predict(scaled)
@@ -145,7 +148,7 @@ if __name__ == "__main__":
                     {"x": 184.56566911172257, "y": 115.44705393956191},
                 ],
                 "brushColor": "#663399",
-                "brushRadius": 150,
+                "brushRadius": 5,
             }
         ],
         "width": 400,
