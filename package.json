@@ -7,6 +7,7 @@
   "keywords": [
     "gatsby"
   ],
+  "homepage": "http://doodleguesser.com",
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",

@@ -1,5 +1,6 @@
 import * as React from "react"
 import Canvas from "./canvas";
+import Footer from "./footer";
 // styles
 const pageStyles = {
   color: "#232129",
@@ -31,7 +32,8 @@ const IndexPage = () => {
         </span>
       </h1>
       <Canvas></Canvas>
-    </main>
+      <Footer></Footer>
+    </main> 
   )
 }
 
