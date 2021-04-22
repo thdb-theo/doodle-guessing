@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import json
 import os, sys
+import ssl
 
 from parser import parse, create_classifier
 
@@ -13,8 +14,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
     def add_headers(self):
         self.send_header("Content-type", "text/json")
-        self.send_header("Access-Control-Allow-Origin", "http://localhost:8000")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        # self.send_header("Access-Control-Allow-Origin", "http://129.242.90.161:5000")
+        # self.send_header("Access-Control-Allow-Origin", "https://thdb-theo.github.io")
+        self.send_header("Access-Control-Allow-Origin", "doodleguesser.com")
+        # self.send_header("Access-Control-Allow-Origin", "*")
+
+
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "content-type")
 
         self.end_headers()
@@ -52,9 +58,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"{\"Hello\": \"World\"}\n")
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 8081
+    # HOST, PORT = "129.242.219.114", 8081
+    HOST, PORT = "localhost", 8080
     socketserver.TCPServer.allow_reuse_address = True
     server = socketserver.TCPServer((HOST, PORT), Handler)
+    # server.socket = ssl.wrap_socket(server.socket, certfile="./cert1.pem", keyfile="./key1.pem", server_side=True)
     try:
         print("Serving at: http://{}:{}".format(HOST, PORT))
         server.serve_forever()

@@ -28,6 +28,10 @@ def parse(d, clf, nrows, ncols):
         for point in line["points"]:
             x, y = int(point["x"]), int(point["y"])
 
+            # clamp x and y inside canvas
+            x = max(min(x, width), 0)
+            y = max(min(y, height), 0)
+            
             # how much the kernel goes outside the canvas on each side
             topout = max(brushsize // 2 - y, 0)
             bottonout = max(brushsize // 2 + y - height, 0)
