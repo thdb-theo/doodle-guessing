@@ -106,7 +106,7 @@ class Canvas extends React.Component {
     }
 
     canvasChange = async () => {
-        await fetch("https://doodleguesser.com/api/", {
+        await fetch("https://api.doodleguesser.com/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
