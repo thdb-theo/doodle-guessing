@@ -1,0 +1,3 @@
+[submodule "doodle-guesser-api"]
+	path = doodle-guesser-api
+	url = git@github.com:thdb-theo/doodle-guesser-api.git
