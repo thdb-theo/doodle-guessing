@@ -1,2 +1,2 @@
 web: npm start
-web: python3 app.py
+web: sh -c 'cd ./src/api' && python3 app.py
