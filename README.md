@@ -6,7 +6,7 @@
 
 - ## 🤔 **What is this?**
   
-  On this site you can draw a digit and the machine learing algorithm will guess what you have drawn. The app is currently deployed with [here](https://doodleguesser.com/)! However you can also run it locally by following these steps:
+  On this site you can draw a digit and the machine learing algorithm will guess what you have drawn. The app is currently deployed with [here](https://www.doodleguesser.com/)! However you can also run it locally by following these steps:
 - ## 🚀 **Installation**
   1. Firstly, clone the repository: `git clone https://github.com/thdb-theo/doodle-guessing/`
   2. Then, locate the directory and the start the server with `npm run develop`
